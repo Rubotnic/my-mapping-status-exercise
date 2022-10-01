@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name = "m_appuser")
+@Table(name = "appusers")
 public class AppUser {
 
     @Id
@@ -18,10 +18,11 @@ public class AppUser {
     private String password;
 
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id", referencedColumnName = "addressId")
     private Address address;
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, targetEntity = Car.class)
     private Collection<Car> ownedCars = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH}, mappedBy = "cars")
@@ -60,7 +61,6 @@ public class AppUser {
     public void addCar(Car ownedcars){
         if(ownedCars == null) throw new IllegalArgumentException("Invalid parameter: Car null");
         if(ownedCars == null) ownedCars = new HashSet<>();
-
         ownedCars.add(ownedcars);
         ownedcars.setOwner(this);
     }
@@ -78,6 +78,16 @@ public class AppUser {
     public void addStatus(Status status){
         if(status == null) throw new IllegalArgumentException("Invalid parameter: Status null");
         if(statuses == null) statuses = new ArrayList<>();
+
+        status.getStatusCode().equals(this);
+        statuses.add(status);
+    }
+
+    public void removeStatus(Status status){
+        if(status == null) throw new IllegalArgumentException("Invalid parameter: Status null");
+
+        status.getStatusCode().equals(this);
+        statuses.add(status);
     }
 
 

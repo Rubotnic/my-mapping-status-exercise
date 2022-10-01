@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "m_status")
+@Table(name = "statuses")
 public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,8 +15,6 @@ public class Status {
     private String statusCode;
 
     @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinTable(name = "m_appuser_status",
-            joinColumns = @JoinColumn(name = "app_user_user_id"), inverseJoinColumns = @JoinColumn(name = "statuses_status_id"))
     private Collection<Car> cars = new ArrayList<>();
 
 

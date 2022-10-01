@@ -16,7 +16,7 @@ import se.lexicon.mymappingstatusexercise.model.Status;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-
+import java.util.Optional;
 
 
 @Profile(value = "dev")
@@ -100,15 +100,6 @@ public class MyCommandLineRunner implements CommandLineRunner {
 
 
 
-//        Car teslaCar = new Car( "CSS777", "Tesla", "C9", LocalDate.parse("2021-11-11"), appUserRager);
-//        entityManager.persist(teslaCar);
-//        System.out.println(teslaCar);
-//
-//
-//        Car naslaCar = new Car( "JAV888", "NÄSLA", "V2000", LocalDate.parse("2022-12-12"), appUserStefan);
-//        entityManager.persist(naslaCar);
-//        System.out.println(naslaCar);
-
         Car ragersCars = carDao.save(new Car("CCC123", "Mässla", "V2", LocalDate.parse("2022-12-12")));
         Car stefansCars = carDao.save(new Car("ABC888", "SAAB", "CD3", LocalDate.parse("2022-11-11")));
 
@@ -118,8 +109,11 @@ public class MyCommandLineRunner implements CommandLineRunner {
         appUserStefan.addCar(stefansCars);
 
 
-        appUserRager.addCar(new Car("ABC888", "SAAB", "CD3", LocalDate.parse("2022-11-11")));
+        appUserRager.addCar(new Car("ABC777", "VOLVO", "HHD", LocalDate.parse("2022-10-10")));
         entityManager.flush();
-        
+
+
+
+
     }
 }

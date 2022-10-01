@@ -3,7 +3,7 @@ package se.lexicon.mymappingstatusexercise.model;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity(name = "m_address")
+@Entity(name = "addresses")
 public class Address {
 
     @Id
@@ -17,9 +17,6 @@ public class Address {
     @Column(nullable = false, length = 100)
     private String city;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "appuser_address")
-    private AppUser appUser;
 
     public Address() {}
 
@@ -69,14 +66,6 @@ public class Address {
         this.city = city;
     }
 
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -98,7 +87,6 @@ public class Address {
                 ", street='" + street + '\'' +
                 ", zipCode='" + zipCode + '\'' +
                 ", city='" + city + '\'' +
-                ", appUser=" + appUser +
                 '}';
     }
 }

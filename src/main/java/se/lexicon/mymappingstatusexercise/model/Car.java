@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Entity
-@Table(name = "m_cars")
+@Table(name = "cars")
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,15 +21,19 @@ public class Car {
     @Column(name = "register_date", columnDefinition = "TIMESTAMP")
     private LocalDate regDate;
 
-
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "user_id")
     private AppUser owner;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST}, mappedBy = "cars")
-    private Collection<Status> statusCodes = new TreeSet<>();
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+    @JoinTable(name = "j_car_status",
+            joinColumns = {
+            @JoinColumn(name = "car_id", referencedColumnName = "carId")},
+            inverseJoinColumns = {
+            @JoinColumn(name = "status_id", referencedColumnName = "statusId")})
+    private Collection<Status> statusCodes = new HashSet<>();
 
     public Car() {}
-
 
 
     public Car(int carId, String regNumber, String brand, String model, LocalDate regDate, AppUser owner, Collection<Status> statusCodes) {
@@ -46,6 +50,7 @@ public class Car {
         this.regNumber = regNumber;
         this.brand = brand;
         this.model = model;
+        this.regDate = regDate;
     }
 
     public Car(String regNumber, String brand, String model, LocalDate regDate, AppUser owner, Collection<Status> statusCodes) {
@@ -57,10 +62,9 @@ public class Car {
         this.statusCodes = statusCodes;
     }
 
-
     public void addStatusCode(Status statcode){
 
-        if (statcode == null) throw new IllegalArgumentException("Invalid parameter: Book was null");
+        if (statcode == null) throw new IllegalArgumentException("Invalid parameter: Status was null");
         if (statusCodes == null) statusCodes = new ArrayList<>();
 
         statusCodes.add(statcode);
@@ -68,18 +72,15 @@ public class Car {
     }
 
     public void removeStatusCode(Status statcode){
-        if (statcode == null) throw new IllegalArgumentException("Invalid parameter: Book was null");
+        if (statcode == null) throw new IllegalArgumentException("Invalid parameter: Status was null");
 
         if (statusCodes != null){
-
             if (statusCodes.contains(statcode)){
                 statcode.setCars(null);
                 statusCodes.remove(statcode);
             }
         }
     }
-
-
 
     public int getCarId() {
         return carId;
@@ -136,7 +137,6 @@ public class Car {
     public void setStatusCodes(Collection<Status> statusCodes) {
         this.statusCodes = statusCodes;
     }
-
 
     @Override
     public boolean equals(Object o) {
